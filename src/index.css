@@ -7,12 +7,15 @@
   --font-serif: "Playfair Display", serif;
 
   --color-brand-blue: #91B0D4;
-  --color-brand-muted: #9DBCCE;
-  --color-brand-pink: #EEC2DB;
-  --color-brand-pink-dark: #D48EB3;
-  --color-brand-offwhite: #FDFBFA;
-  --color-brand-grey: #4A4A4F;
-  --color-brand-beige: #F1E9DB;
+  --color-brand-light-blue: #DBEEFE;
+  --color-brand-muted: #666666;
+  --color-brand-pink: #FFC4E1;
+  --color-brand-vibrant-pink: #DE6495;
+  --color-brand-pink-dark: #D81B60;
+  --color-brand-offwhite: #F8F3ED;
+  --color-brand-grey: #222222;
+  --color-brand-charcoal: #0D0D0D;
+  --color-brand-beige: #F5F1EE;
 }
 
 @layer base {
@@ -23,12 +26,30 @@
 
 @layer base {
   body {
-    @apply bg-brand-offwhite text-brand-grey antialiased;
+    @apply bg-brand-offwhite text-brand-charcoal antialiased selection:bg-brand-vibrant-pink selection:text-white;
   }
 }
 
+.scalloped-top {
+  mask-image: radial-gradient(circle at 10px -5px, transparent 10px, black 11px);
+  mask-size: 20px 100%;
+}
+
+.scalloped-bottom {
+  mask-image: radial-gradient(circle at 10px 100% plus 5px, transparent 10px, black 11px);
+  mask-size: 20px 100%;
+}
+
+.torn-paper {
+  filter: url(#torn-paper-filter);
+}
+
 .glass-card {
-  @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-xl shadow-brand-blue/5;
+  @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-xl;
+}
+
+.contrast-card {
+  @apply bg-white border-4 border-brand-charcoal shadow-[12px_12px_0px_0px_rgba(13,13,13,1)] transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[14px_14px_0px_0px_rgba(13,13,13,1)];
 }
 
 .bubbly-button {
@@ -59,6 +80,59 @@
 
 .floating {
   animation: floating 6s ease-in-out infinite;
+}
+
+/* Timeline Styles */
+.visual-timeline {
+  @apply w-full overflow-hidden bg-white/40 backdrop-blur-xl rounded-[4rem] p-12 border border-white/60 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] relative;
+}
+
+.timeline-grid {
+  @apply flex flex-col w-full relative;
+}
+
+.grid-header {
+  @apply flex justify-between px-0 mb-16 text-[12px] font-black tracking-[0.5em] text-brand-grey/30 uppercase;
+}
+
+.grid-header span {
+  @apply flex-1 text-center relative;
+}
+
+/* Vertical lines */
+.grid-lines {
+  @apply absolute inset-0 flex justify-between pointer-events-none;
+}
+
+.grid-line {
+  @apply w-[1px] bg-brand-grey/5 h-full transition-colors;
+}
+
+.bars-container {
+  @apply relative h-[300px] w-full grid;
+  grid-template-columns: repeat(60, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  gap: 12px 0;
+}
+
+.timeline-bar {
+  @apply rounded-full h-[10px] self-center relative transition-all duration-500 hover:h-[14px] hover:shadow-lg hover:shadow-brand-pink/20;
+  grid-column: var(--start, 1) / span var(--duration, 1);
+  grid-row: var(--row, 1);
+  background-color: #B25A5A; /* Primary color from your reference image */
+}
+
+/* Color variations for deeper integration */
+.timeline-bar:nth-child(even) { @apply bg-brand-blue; }
+.timeline-bar:nth-child(3n) { @apply bg-brand-pink; }
+
+.timeline-bar::before {
+  content: attr(data-label);
+  @apply absolute -top-8 left-0 text-[9px] font-black uppercase tracking-[0.2em] text-brand-grey/40 whitespace-nowrap leading-none transition-colors;
+}
+
+.timeline-bar:hover::before {
+  @apply text-brand-grey font-bold;
 }
 
 @keyframes floating {
